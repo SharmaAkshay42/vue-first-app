@@ -3,10 +3,13 @@
     <header>
       <h1>My Friends</h1>
     </header>
+    <new-friend @add-contact="addContact"></new-friend>
     <ul>
-      <friend-contact name="Manuel Lorenz" phone-number="01234 78992" email-address="manuel@localhost.com" >
+      <friend-contact v-for="friend in friends" :key="friend.id" :id="friend.id" :name="friend.name" :phone-number="friend.phone"
+        :email-address="friend.email" :is-favourite="friend.isFavourite" @toggle-favourite="toggelFavouriteStatus" @delete="deleteContact">
       </friend-contact>
-      <friend-contact name="Julie Jones" phone-number="0987 654321" email-address="julie@localhost.com"></friend-contact>
+      <!-- <friend-contact name="Julie Jones" phone-number="0987 654321" email-address="julie@localhost.com"> -->
+      <!-- </friend-contact> -->
     </ul>
   </section>
 </template>
@@ -20,17 +23,40 @@ export default {
           id: 'manuel',
           name: 'Manuel Lorenz',
           phone: '0123 45678 90',
-          email: 'manuel@localhost.com'
+          email: 'manuel@localhost.com',
+          isFavourite: true
         },
         {
           id: 'julie',
           name: 'Julie Nolka',
           phone: '0123 45678 90',
-          email: 'julie@localhost.com'
+          email: 'julie@localhost.com',
+          isFavourite: true
         }
       ]
     }
-  }
+  },
+  methods: {
+    toggelFavouriteStatus(id) {
+      // alert('Favourite Status changed!');
+      const selectedFriend = this.friends.find(friend => friend.id === id);
+      selectedFriend.isFavourite = ! selectedFriend.isFavourite;
+      // console.log(selectedFriend);
+    },
+    addContact(name, phone, email) {
+      const newFriendContact = {
+        id: new Date().toISOString(),
+        name: name,
+        phone: phone,
+        email: email,
+        isFavourite: false
+      };
+      this.friends.push(newFriendContact);
+    },
+    deleteContact(friendId) {
+      this.friends = this.friends.filter((friend) => friend.id !== friendId);
+    }
+  },
 
 }
 </script>
@@ -68,7 +94,8 @@ header {
   list-style: none;
 }
 
-#app li {
+#app li,
+#app form {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   margin: 1rem auto;
   border-radius: 10px;
@@ -101,4 +128,21 @@ header {
   border-color: #ec3169;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
 }
+
+#app input {
+  font: inherit;
+  padding: 0.15rem;
+}
+
+#app label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 7rem;
+  display: inline-block;
+}
+
+#app form div {
+  margin: 1rem 0;
+}
+
 </style>
