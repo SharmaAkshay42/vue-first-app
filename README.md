@@ -1,5 +1,8 @@
 # vue-first-app
 
+## Introduction
+App Maximilian (Academind) uses to teach Vue. 
+
 ## Project setup
 ```
 npm install
